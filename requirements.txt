@@ -1,0 +1,7 @@
+numpy~=1.20.3
+traits~=6.2.0
+traitsui~=7.2.0
+pyface~=7.3.0
+mayavi~=4.7.1
+scipy~=1.6.3
+setuptools~=49.6.0
