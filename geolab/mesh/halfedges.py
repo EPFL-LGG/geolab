@@ -38,15 +38,15 @@ def halfedges(faces):
     """
     try:
         H = _make_halfedges(faces)
-    except:
+    except Exception as e1:
         try:
             oriented_faces = orient_faces(faces)
             _make_halfedges(oriented_faces)
             print('*** Mesh reoriented ***')
-        except:
+        except Exception as e2:
             raise ValueError('Half-Edge mesh creation failed. '
                              'Probably the mesh is non manifold '
-                             'or non orientable')
+                             'or non orientable: \n{e1}\n{e2}'.format(e1, e2))
     return H.astype('i')
 
 
@@ -114,7 +114,7 @@ def _make_halfedges(faces):
     K[:, 0] = np.arange(h.shape[0])
     m = np.amin(K, axis=1)
     u = np.unique(m)
-    imap = np.arange(np.max(u) + 1, dtype=np.int)
+    imap = np.arange(np.max(u) + 1, dtype=np.int64)
     imap[u] = np.arange(u.shape[0])
     h[:, 5] = imap[m]
     return h

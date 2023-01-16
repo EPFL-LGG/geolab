@@ -39,9 +39,9 @@ __author__ = 'Davide Pellis'
 def mesh_plane(x_faces=10, y_faces=10, x_range=(-5, 5), y_range=(-5, 5)):
     x_faces += 1
     y_faces += 1
-    M = np.arange(x_faces * y_faces, dtype=np.int)
+    M = np.arange(x_faces * y_faces, dtype=np.int32)
     M = np.reshape(M, (x_faces, y_faces))
-    quads = np.zeros((x_faces - 1, y_faces - 1, 4), dtype=np.int)
+    quads = np.zeros((x_faces - 1, y_faces - 1, 4), dtype=np.int32)
     quads[:, :, 3] = M[:M.shape[0] - 1, :M.shape[1] - 1]
     quads[:, :, 2] = M[:M.shape[0] - 1, 1:]
     quads[:, :, 1] = M[1:, 1:]
@@ -60,10 +60,10 @@ def mesh_cylinder(vertical_faces=5, around_faces=8, center=(0, 0, 0), radius=1, 
     C = np.array(center)
     Fx = around_faces
     Fy = vertical_faces + 1
-    M = np.arange(Fx * Fy, dtype=np.int)
+    M = np.arange(Fx * Fy, dtype=np.int32)
     M = np.reshape(M, (Fy, Fx))
     M = np.insert(M, Fx, M[:, 0], axis=1)
-    Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int)
+    Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int32)
     Q[:, :, 0] = M[:M.shape[0] - 1, :M.shape[1] - 1]
     Q[:, :, 1] = M[:M.shape[0] - 1, 1:]
     Q[:, :, 2] = M[1:, 1:]
@@ -86,16 +86,16 @@ def mesh_sphere(around_faces=20, vertical_faces=10, center=(0, 0, 0), radius=1):
     center = np.array(center)
     Fx = around_faces
     Fy = vertical_faces - 1
-    M = np.arange(Fx * Fy, dtype=np.int)
+    M = np.arange(Fx * Fy, dtype=np.int32)
     M = np.reshape(M, (Fy, Fx)) + 1
     M = np.insert(M, Fx, M[:, 0], axis=1)
-    Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int)
+    Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int32)
     Q[:, :, 3] = M[:M.shape[0] - 1, :M.shape[1] - 1]
     Q[:, :, 2] = M[:M.shape[0] - 1, 1:]
     Q[:, :, 1] = M[1:, 1:]
     Q[:, :, 0] = M[1:, :M.shape[1] - 1]
     Q = Q.reshape((Fx * (Fy - 1), 4), order='C').tolist()
-    T = np.zeros((2, Fx, 3), dtype=np.int)
+    T = np.zeros((2, Fx, 3), dtype=np.int32)
     T[0, :, 0] = M[0, :M.shape[1] - 1]
     T[0, :, 1] = M[0, 1:]
     T[0, :, 2] = 0
@@ -126,11 +126,11 @@ def mesh_torus(ring_faces=25, section_faces=8, center=(0, 0, 0), ring_radius=3,
     center = np.array(center)
     Fx = section_faces
     Fy = ring_faces
-    M = np.arange(Fx * Fy, dtype=np.int)
+    M = np.arange(Fx * Fy, dtype=np.int32)
     M = np.reshape(M, (Fy, Fx))
     M = np.insert(M, Fx, M[:, 0], axis=1)
     M = np.insert(M, Fy, M[0, :], axis=0)
-    faces = np.zeros((Fy, Fx, 4), dtype=np.int)
+    faces = np.zeros((Fy, Fx, 4), dtype=np.int32)
     faces[:, :, 3] = M[:M.shape[0] - 1, :M.shape[1] - 1]
     faces[:, :, 2] = M[:M.shape[0] - 1, 1:]
     faces[:, :, 1] = M[1:, 1:]
@@ -188,21 +188,21 @@ def mesh_rectangular_pipe(vertices, normals, height=0.1, width=0.05,
     if not closed:
         N[-1] = N[-2]
     if not closed:
-        M = np.arange(Fx * Fy, dtype=np.int)
+        M = np.arange(Fx * Fy, dtype=np.int32)
         M = np.reshape(M, (Fy, Fx))
         M = np.insert(M, Fx, M[:, 0], axis=1)
-        Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int)
+        Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int32)
         Q[:, :, 0] = M[:M.shape[0] - 1, :M.shape[1] - 1]
         Q[:, :, 1] = M[:M.shape[0] - 1, 1:]
         Q[:, :, 2] = M[1:, 1:]
         Q[:, :, 3] = M[1:, :M.shape[1] - 1]
         Q = Q.reshape((Fx * (Fy - 1), 4), order='C')
     else:
-        M = np.arange(Fx * Fy, dtype=np.int)
+        M = np.arange(Fx * Fy, dtype=np.int32)
         M = np.reshape(M, (Fy, Fx))
         M = np.insert(M, Fx, M[:, 0], axis=1)
         M = np.insert(M, Fy, M[0, :], axis=0)
-        Q = np.zeros((Fy, Fx, 4), dtype=np.int)
+        Q = np.zeros((Fy, Fx, 4), dtype=np.int32)
         Q[:, :, 0] = M[:M.shape[0] - 1, :M.shape[1] - 1]
         Q[:, :, 1] = M[:M.shape[0] - 1, 1:]
         Q[:, :, 2] = M[1:, 1:]
@@ -249,21 +249,21 @@ def mesh_circular_pipe(vertices, radius=0.1, closed=False, sides=48, comb=False,
     Fx = sides
     Fy = len(vertices)
     if not closed:
-        M = np.arange(Fx * Fy, dtype=np.int)
+        M = np.arange(Fx * Fy, dtype=np.int32)
         M = np.reshape(M, (Fy, Fx))
         M = np.insert(M, Fx, M[:, 0], axis=1)
-        Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int)
+        Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int32)
         Q[:, :, 0] = M[:M.shape[0] - 1, :M.shape[1] - 1]
         Q[:, :, 1] = M[:M.shape[0] - 1, 1:]
         Q[:, :, 2] = M[1:, 1:]
         Q[:, :, 3] = M[1:, :M.shape[1] - 1]
         Q = Q.reshape((Fx * (Fy - 1), 4), order='C')
     else:
-        M = np.arange(Fx * Fy, dtype=np.int)
+        M = np.arange(Fx * Fy, dtype=np.int32)
         M = np.reshape(M, (Fy, Fx))
         M = np.insert(M, Fx, M[:, 0], axis=1)
         M = np.insert(M, Fy, M[0, :], axis=0)
-        Q = np.zeros((Fy, Fx, 4), dtype=np.int)
+        Q = np.zeros((Fy, Fx, 4), dtype=np.int32)
         Q[:, :, 0] = M[:M.shape[0] - 1, :M.shape[1] - 1]
         Q[:, :, 1] = M[:M.shape[0] - 1, 1:]
         Q[:, :, 2] = M[1:, 1:]
