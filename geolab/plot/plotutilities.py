@@ -143,6 +143,9 @@ def make_module(color, opacity, lut_range, lut_expansion, reverse_lut,
     LUT = rgba_lut(color, opacity, lut_expansion)
     if type(LUT) is str:
         module.scalar_lut_manager.lut_mode = LUT
+        curr_lut = module.scalar_lut_manager.lut.table.to_array()
+        curr_lut[:, 3] = int(opacity * 255)
+        module.scalar_lut_manager.lut.table = curr_lut
     else:
         module.scalar_lut_manager.lut.table = LUT
     module.scalar_lut_manager.reverse_lut = reverse_lut
