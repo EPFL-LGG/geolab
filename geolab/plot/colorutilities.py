@@ -418,7 +418,7 @@ def rgba_lut(color, opacity=1, expansion=2):
     if isinstance(color, np.ndarray):
         lut = color
         if len(color.shape) == 2:
-            if color.shape[2] == 3:
+            if color.shape[1] == 3:
                 lut = np.column_stack((lut, np.tile(255, len(color))))
     elif color == 'turbo':
         lut = turbo_lut_table()
