@@ -304,6 +304,7 @@ def mesh_circular_pipe(vertices, radius=0.1, closed=False, sides=48, comb=False,
               + B[i] * cos * np.cos(phi - alpha) * V3[i, 2])
     else:
         V2 = N
+        V3 = np.cross(V1, V2)
         B = np.sqrt(np.abs(0.5 * (1 + C))) + 1e-10
         B = radius / B
         B = np.hstack((B, B, B))
