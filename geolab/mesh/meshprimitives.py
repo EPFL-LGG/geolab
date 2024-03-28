@@ -81,6 +81,14 @@ def mesh_cylinder(vertical_faces=5, around_faces=8, center=(0, 0, 0), radius=1, 
     vertices = np.vstack((Px, Py, Pz)).T
     return vertices, faces
 
+def mesh_cube():
+    faces = np.array([[0, 1, 2, 3], [4, 5, 6, 7], [0, 4, 5, 1], [1, 5, 6, 2], [2, 6, 7, 3], [3, 7, 4, 0]], dtype=np.int32)
+    vertices = np.array([
+        [-1.0, -1.0, -1.0], [1.0, -1.0, -1.0], [1.0, 1.0, -1.0], [-1.0, 1.0, -1.0], 
+        [-1.0, -1.0, 1.0], [1.0, -1.0, 1.0], [1.0, 1.0, 1.0], [-1.0, 1.0, 1.0]
+    ])
+    return vertices, faces
+
 
 def mesh_sphere(around_faces=20, vertical_faces=10, center=(0, 0, 0), radius=1):
     center = np.array(center)

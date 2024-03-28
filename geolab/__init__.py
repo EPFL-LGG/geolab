@@ -45,7 +45,7 @@ from geolab.mesh.subdivision import explode_faces, face_triangles, \
     triangular_remesh, weld_faces, remesh_test, equalize_valences
 
 from geolab.mesh.meshprimitives import mesh_plane, mesh_torus, mesh_sphere, \
-    mesh_cylinder, mesh_icosahedron, mesh_rectangular_pipe, mesh_circular_pipe, \
+    mesh_cylinder, mesh_cube, mesh_icosahedron, mesh_rectangular_pipe, mesh_circular_pipe, \
     mesh_triangular_grid, dashed_lines
 
 from geolab.geometry.frame import make_frame, rotate_frame
