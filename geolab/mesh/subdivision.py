@@ -222,8 +222,8 @@ class Mesh(object):
         dual_halfedges[b, 1] = np.copy(fb)
         dual_halfedges[b, 3] = np.copy(hb1)
         dual_halfedges[H[b, 3], 2] = np.copy(hb2)
-        Hb1 = np.zeros((B, 6), dtype=np.int)
-        Hb2 = np.zeros((B, 6), dtype=np.int)
+        Hb1 = np.zeros((B, 6), dtype=np.int32)
+        Hb2 = np.zeros((B, 6), dtype=np.int32)
         Hb1[:, 0] = -1
         Hb2[:, 0] = H[b, 0]
         Hb1[:, 1] = fb

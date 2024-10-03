@@ -203,15 +203,15 @@ class Arrows(object):
         Fy = 7
         N = self.vectors.shape[0]
         F = N * Fx * Fy + 1
-        M = np.arange(Fx * Fy, dtype=np.int)
+        M = np.arange(Fx * Fy, dtype=np.int32)
         M = np.reshape(M, (Fy, Fx))
         M = np.insert(M, Fx, M[:, 0], axis=1)
-        Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int)
+        Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int32)
         Q[:, :, 3] = M[:M.shape[0] - 1, :M.shape[1] - 1]
         Q[:, :, 2] = M[:M.shape[0] - 1, 1:]
         Q[:, :, 1] = M[1:, 1:]
         Q[:, :, 0] = M[1:, :M.shape[1] - 1]
-        T = np.zeros((1, Fx, 3), dtype=np.int)
+        T = np.zeros((1, Fx, 3), dtype=np.int32)
         T[0, :, 0] = M[-1, 1:]
         T[0, :, 1] = M[-1, :M.shape[1] - 1]
         T[0, :, 2] = Fx * Fy
@@ -222,10 +222,10 @@ class Arrows(object):
         t1 = np.repeat(1, N * Fx * (Fy - 1))
         t2 = np.repeat(0, N * Fx)
         types = np.hstack((t1, t2))
-        Qd = np.zeros((N, Q.shape[0], Q.shape[1]), dtype=np.int)
+        Qd = np.zeros((N, Q.shape[0], Q.shape[1]), dtype=np.int32)
         Qd[:] = Q
         Qd += O
-        Td = np.zeros((N, T.shape[0], T.shape[1]), dtype=np.int)
+        Td = np.zeros((N, T.shape[0], T.shape[1]), dtype=np.int32)
         Td[:] = T
         Td += O
         Qd = np.insert(Qd, 0, 4, axis=2)
@@ -396,15 +396,15 @@ class Spheres(object):
         Fy = self._resolution - 1
         N = self.center.shape[0]
         F = N * (Fx * (Fy + 1))
-        M = np.arange(Fx * Fy, dtype=np.int)
+        M = np.arange(Fx * Fy, dtype=np.int32)
         M = np.reshape(M, (Fy, Fx))
         M = np.insert(M, Fx, M[:, 0], axis=1)
-        Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int)
+        Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int32)
         Q[:, :, 3] = M[:M.shape[0] - 1, :M.shape[1] - 1]
         Q[:, :, 2] = M[:M.shape[0] - 1, 1:]
         Q[:, :, 1] = M[1:, 1:]
         Q[:, :, 0] = M[1:, :M.shape[1] - 1]
-        T = np.zeros((2, Fx, 3), dtype=np.int)
+        T = np.zeros((2, Fx, 3), dtype=np.int32)
         T[0, :, 0] = M[0, :M.shape[1] - 1] + 1
         T[0, :, 1] = M[0, 1:] + 1
         T[1, :, 0] = M[-1, 1:] + 1
@@ -417,10 +417,10 @@ class Spheres(object):
         t1 = np.repeat(1, N * Fx * (Fy - 1))
         t2 = np.repeat(0, N * Fx)
         types = np.hstack((t1, t2, t2))
-        Qd = np.zeros((N, Q.shape[0], Q.shape[1]), dtype=np.int)
+        Qd = np.zeros((N, Q.shape[0], Q.shape[1]), dtype=np.int32)
         Qd[:] = Q
         Qd += O
-        Td = np.zeros((N, T.shape[0], T.shape[1]), dtype=np.int)
+        Td = np.zeros((N, T.shape[0], T.shape[1]), dtype=np.int32)
         Td[:] = T
         Td += O
         Qd = np.insert(Qd, 0, 4, axis=2)
@@ -556,21 +556,21 @@ class Pipe(object):
         Fx = self._sides
         Fy = len(self._vertices)
         if not self._closed:
-            M = np.arange(Fx * Fy, dtype=np.int)
+            M = np.arange(Fx * Fy, dtype=np.int32)
             M = np.reshape(M, (Fy, Fx))
             M = np.insert(M, Fx, M[:, 0], axis=1)
-            Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int)
+            Q = np.zeros((Fy - 1, Fx, 4), dtype=np.int32)
             Q[:, :, 0] = M[:M.shape[0] - 1, :M.shape[1] - 1]
             Q[:, :, 1] = M[:M.shape[0] - 1, 1:]
             Q[:, :, 2] = M[1:, 1:]
             Q[:, :, 3] = M[1:, :M.shape[1] - 1]
             Q = Q.reshape((Fx * (Fy - 1), 4), order='C')
         else:
-            M = np.arange(Fx * Fy, dtype=np.int)
+            M = np.arange(Fx * Fy, dtype=np.int32)
             M = np.reshape(M, (Fy, Fx))
             M = np.insert(M, Fx, M[:, 0], axis=1)
             M = np.insert(M, Fy, M[0, :], axis=0)
-            Q = np.zeros((Fy, Fx, 4), dtype=np.int)
+            Q = np.zeros((Fy, Fx, 4), dtype=np.int32)
             Q[:, :, 0] = M[:M.shape[0] - 1, :M.shape[1] - 1]
             Q[:, :, 1] = M[:M.shape[0] - 1, 1:]
             Q[:, :, 2] = M[1:, 1:]

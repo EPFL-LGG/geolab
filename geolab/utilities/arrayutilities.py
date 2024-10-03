@@ -61,7 +61,7 @@ def repeated_range(array, offset=0):
     if array.shape[0] == 0:
         return np.array([])
     k = np.unique(array)
-    imap = np.zeros(np.amax(k) + 1, dtype=np.int)
+    imap = np.zeros(np.amax(k) + 1, dtype=np.int32)
     imap[k] = np.arange(offset, offset + k.shape[0])
     rrange = imap[array]
     return rrange

@@ -116,20 +116,76 @@ def read_mesh_obj(file_name, read_texture=False):
         return v, f, uv
     return v, f
 
+# def save_mesh_obj(vertices, connectivity, file_name='mesh',
+#                   overwrite=False, texture=None):
+#     """Save the mesh as OBJ file.
+
+#     Parameters
+#     ----------
+#     vertices : np.array (H, 3)
+#         The array of vertices.
+
+#     Optional Parameters
+#     -------------------
+#     connectivity : np.array (F, n) / list of lists / np.array (H, 6)
+#         The array or connectivity. Faces / faces list / halfedges.
+#     file_name : str
+#         The path of the OBJ file to be created.
+#     overwrite : bool
+#         If `False` (default), when the path already exists, a sequential
+#         number is added to file_name. If `True`, existing paths are
+#         overwritten.
+#     texture : np.array (V, 2)
+#         The uv vertex coordinates.
+
+#     Returns
+#     -------
+#     str
+#         The path of the saves OBJ file (without extension).
+#     """
+#     path = make_filepath(file_name, 'obj', overwrite)
+#     obj = open(path, 'w')
+#     line = 'o {}\n'.format(file_name)
+#     obj.write(line)
+#     if are_halfedges(vertices, connectivity):
+#         faces = faces_list(connectivity)
+#     else:
+#         faces = connectivity
+#     for v in range(len(vertices)):
+#         vi = vertices[v]
+#         line = 'v {} {} {}\n'.format(vi[0], vi[1], vi[2])
+#         obj.write(line)
+#     if texture is not None:
+#         for v in range(len(texture)):
+#             uv = texture[v]
+#             line = 'vt {} {}\n'.format(uv[0], uv[1])
+#             obj.write(line)
+#     for f in range(len(faces)):
+#         obj.write('f ')
+#         N = len(faces[f])
+#         for v in range(N - 1):
+#             vf = str(faces[f][v] + 1)
+#             obj.write(vf + ' ')
+#         vf = str(faces[f][N - 1] + 1)
+#         obj.write(vf + '\n')
+#     obj.close()
+#     out = 'OBJ saved in {}'.format(path)
+#     print(out)
+#     return path.split('.')[0]
 
 def save_mesh_obj(vertices, connectivity, file_name='mesh',
-                  overwrite=False, texture=None):
+                  overwrite=False, texture=None, add_group=0, are_faces=False):
     """Save the mesh as OBJ file.
 
     Parameters
     ----------
-    vertices : np.array (H, 3)
+    vertices : np.array (V, 3)
         The array of vertices.
+    connectivity : np.array (F, n) / list of lists / np.array (H, 6)
+        The array or connectivity. Faces / faces list / halfedges.
 
     Optional Parameters
     -------------------
-    connectivity : np.array (F, n) / list of lists / np.array (H, 6)
-        The array or connectivity. Faces / faces list / halfedges.
     file_name : str
         The path of the OBJ file to be created.
     overwrite : bool
@@ -138,6 +194,10 @@ def save_mesh_obj(vertices, connectivity, file_name='mesh',
         overwritten.
     texture : np.array (V, 2)
         The uv vertex coordinates.
+    add_group : int
+        The group to which the faces belong. Default is 0.
+    are_faces : bool
+        If `True`, the connectivity is an array of faces. Default is `False`.
 
     Returns
     -------
@@ -145,10 +205,18 @@ def save_mesh_obj(vertices, connectivity, file_name='mesh',
         The path of the saves OBJ file (without extension).
     """
     path = make_filepath(file_name, 'obj', overwrite)
-    obj = open(path, 'w')
-    line = 'o {}\n'.format(file_name)
+    if add_group != 0:
+        obj = open(path, 'a')
+    else:
+        obj = open(path, 'w')
+    
+    if add_group == 0:
+        line = 'o {}\n'.format(file_name)
+        obj.write(line)
+    line = 'g {}\n'.format(add_group)
     obj.write(line)
-    if are_halfedges(vertices, connectivity):
+    
+    if are_halfedges(vertices, connectivity) and not are_faces:
         faces = faces_list(connectivity)
     else:
         faces = connectivity
@@ -165,9 +233,9 @@ def save_mesh_obj(vertices, connectivity, file_name='mesh',
         obj.write('f ')
         N = len(faces[f])
         for v in range(N - 1):
-            vf = str(faces[f][v] + 1)
+            vf = str(int(faces[f][v] + 1))
             obj.write(vf + ' ')
-        vf = str(faces[f][N - 1] + 1)
+        vf = str(int(faces[f][N - 1] + 1))
         obj.write(vf + '\n')
     obj.close()
     out = 'OBJ saved in {}'.format(path)
