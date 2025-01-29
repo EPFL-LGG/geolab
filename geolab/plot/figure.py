@@ -123,6 +123,14 @@ class Figure(SourcesManager):
     @transparent.setter
     def transparent(self, transparent):
         self._kwargs['transparent'] = transparent
+        
+    @property
+    def use_depth_peeling(self):
+        return self._kwargs.get('use_depth_peeling', True)
+
+    @use_depth_peeling.setter
+    def use_depth_peeling(self, use_depth_peeling):
+        self._kwargs['use_depth_peeling'] = use_depth_peeling
 
     @property
     def size(self):
@@ -329,6 +337,7 @@ class Figure(SourcesManager):
             self._set_lights(scene)
         scene.background = self.background
         scene.disable_render = False
+        scene.renderer.use_depth_peeling = self.use_depth_peeling
         scene.render()
         self._vtk_scene = scene
 
@@ -342,9 +351,8 @@ class Figure(SourcesManager):
         w2if.input_buffer_type = 'rgba'
         w2if.update()
         shape = w2if.output.dimensions
-        img = w2if.output.point_data.scalars.to_array()
-        img.shape = (shape[1], shape[0], 4)
-        img = np.flipud(img) / 255
+        img = w2if.output.point_data.scalars.to_array().reshape(shape[1], shape[0], 4).astype(np.float32)
+        img = np.flipud(img) / 255.0
         return img
 
     def _make_shadow(self):

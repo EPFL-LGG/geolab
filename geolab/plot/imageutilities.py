@@ -26,7 +26,9 @@ def blur_shadow(img, blur=20, opacity=0.5):
 
 
 def add_shadow(img, shadow):
-    for i in range(3):
-        img[:, :, i] = img[:, :, 3] * img[:, :, i] + (1 - img[:, :, 3]) * shadow[:, :, i]
-    img[:, :, 3] = img[:, :, 3] + (1 - img[:, :, 3]) * shadow[:, :, 3]
+    # img over shadow, https://en.wikipedia.org/wiki/Alpha_compositing
+    h, w = img.shape[:2]
+    new_alpha = img[:, :, 3] + (1.0 - img[:, :, 3]) * shadow[:, :, 3]
+    img[:, :, :3] = (img[:, :, 3].reshape(h, w, 1) * img[:, :, :3] + (1.0 - img[:, :, 3].reshape(h, w, 1)) * shadow[:, :, 3].reshape(h, w, 1) * shadow[:, :, :3]) / (1.0e-12 + new_alpha.reshape(h, w, 1))
+    img[:, :, 3] = new_alpha
     return img
