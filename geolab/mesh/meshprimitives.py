@@ -253,7 +253,7 @@ def mesh_rectangular_pipe(vertices, normals, height=0.1, width=0.05,
 
 
 def mesh_circular_pipe(vertices, radius=0.1, closed=False, sides=48, comb=False,
-                       vertex_normals=None):
+                       vertex_normals=None, eps=1e-10, return_bottom_faces=False):
     Fx = sides
     Fy = len(vertices)
     if not closed:
@@ -289,7 +289,7 @@ def mesh_circular_pipe(vertices, radius=0.1, closed=False, sides=48, comb=False,
         alpha = np.einsum('ij,ij->i', np.cross(N, V2), V3)
         alpha = np.arcsin(alpha)
         alpha[sin < 0] += np.pi
-        B = np.sqrt(np.abs(0.5 * (1 + C))) + 1e-10
+        B = np.maximum(np.sqrt(np.abs(0.5 * (1 + C))), eps)
         B = radius / B - radius
         B = np.hstack((B, B, B))
         phi = np.linspace(0, 2 * np.pi, Fx + 1)
@@ -313,7 +313,7 @@ def mesh_circular_pipe(vertices, radius=0.1, closed=False, sides=48, comb=False,
     else:
         V2 = N
         V3 = np.cross(V1, V2)
-        B = np.sqrt(np.abs(0.5 * (1 + C))) + 1e-10
+        B = np.maximum(np.sqrt(np.abs(0.5 * (1 + C))), eps)
         B = radius / B
         B = np.hstack((B, B, B))
         phi = np.linspace(0, 2 * np.pi, Fx + 1)
@@ -329,6 +329,12 @@ def mesh_circular_pipe(vertices, radius=0.1, closed=False, sides=48, comb=False,
     Py = np.reshape(Py, (Fx * Fy), order='C')
     Pz = np.reshape(Pz, (Fx * Fy), order='C')
     points = np.vstack((Px, Py, Pz)).T
+    if return_bottom_faces:
+        BF = np.concatenate([
+            np.arange(sides).reshape(1, -1), 
+            points.shape[0] - 1 - np.arange(sides).reshape(1, -1),
+        ], axis=0)
+        return points, Q, BF
     return points, Q
 
 
