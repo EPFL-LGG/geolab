@@ -563,9 +563,8 @@ class GuidedProjection(object):
             H = H.tocsr()
             K = K.tocsr()
             R = self._R.tocsr()
-            A = sparse.spmatrix.dot(H.transpose(), H) + sparse.spmatrix.dot(K.transpose(), K) + R
-            a = sparse.spmatrix.dot(H.transpose(), r) + sparse.spmatrix.dot(K.transpose(), s) \
-                + self.epsilon ** 2 * X
+            A = sparse.csr_matrix.dot(H.transpose(), H) + sparse.csr_matrix.dot(K.transpose(), K) + R
+            a = sparse.csr_matrix.dot(H.transpose(), r) + sparse.csr_matrix.dot(K.transpose(), s) + self.epsilon ** 2 * X
             if self.step_control and self._residual_norm is None:
                 res0 = H.dot(X) - r
                 res0 = np.linalg.norm(res0)
