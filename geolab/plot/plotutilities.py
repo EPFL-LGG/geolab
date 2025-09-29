@@ -35,6 +35,24 @@ __author__ = 'Davide Pellis'
 
 
 def face_cell_arrays(faces, halfedges=False):
+    '''Convert a faces array to VTK cell array format.
+    
+    Args:
+        faces (np.ndarray): Array of faces, either as halfedges or as faces.
+        halfedges (bool): Whether the faces are given as halfedges or not.
+
+    Returns:
+        cells (np.ndarray): VTK cell array.
+        cell_types (np.ndarray): VTK cell types (0 for triangle, 1 for quad, 2 for polygons).
+
+    Note:
+        Here is an example of cell format:
+
+        cells = array([4, 0, 1, 2, 3, # tetra
+                       8, 4, 5, 6, 7, 8, 9, 10, 11 # hex
+                       ])
+        The number of vertices per cell is given first, followed by the vertex indices.
+    '''
     if halfedges:
         i = faces_ordered_halfedges(faces)
         vi = faces[i, 0]
